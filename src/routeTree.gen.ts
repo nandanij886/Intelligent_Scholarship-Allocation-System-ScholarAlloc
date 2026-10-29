@@ -11,7 +11,15 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AlgorithmsRouteImport } from './routes/algorithms'
+import { Route as AllocateRouteImport } from './routes/allocate'
+import { Route as CompareRouteImport } from './routes/compare'
+import { Route as GraphRouteImport } from './routes/graph'
+import { Route as ReportsRouteImport } from './routes/reports'
+import { Route as ScholarshipsRouteImport } from './routes/scholarships'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as StudentsRouteImport } from './routes/students'
+import { Route as TreeRouteImport } from './routes/tree'
+import { Route as WhatIfRouteImport } from './routes/what-if'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,40 +31,146 @@ const AlgorithmsRoute = AlgorithmsRouteImport.update({
   path: '/algorithms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AllocateRoute = AllocateRouteImport.update({
+  id: '/allocate',
+  path: '/allocate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareRoute = CompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GraphRoute = GraphRouteImport.update({
+  id: '/graph',
+  path: '/graph',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScholarshipsRoute = ScholarshipsRouteImport.update({
+  id: '/scholarships',
+  path: '/scholarships',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentsRoute = StudentsRouteImport.update({
+  id: '/students',
+  path: '/students',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TreeRoute = TreeRouteImport.update({
+  id: '/tree',
+  path: '/tree',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WhatIfRoute = WhatIfRouteImport.update({
+  id: '/what-if',
+  path: '/what-if',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/algorithms': typeof AlgorithmsRoute
+  '/allocate': typeof AllocateRoute
+  '/compare': typeof CompareRoute
+  '/graph': typeof GraphRoute
+  '/reports': typeof ReportsRoute
+  '/scholarships': typeof ScholarshipsRoute
   '/settings': typeof SettingsRoute
+  '/students': typeof StudentsRoute
+  '/tree': typeof TreeRoute
+  '/what-if': typeof WhatIfRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/algorithms': typeof AlgorithmsRoute
+  '/allocate': typeof AllocateRoute
+  '/compare': typeof CompareRoute
+  '/graph': typeof GraphRoute
+  '/reports': typeof ReportsRoute
+  '/scholarships': typeof ScholarshipsRoute
   '/settings': typeof SettingsRoute
+  '/students': typeof StudentsRoute
+  '/tree': typeof TreeRoute
+  '/what-if': typeof WhatIfRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/algorithms': typeof AlgorithmsRoute
+  '/allocate': typeof AllocateRoute
+  '/compare': typeof CompareRoute
+  '/graph': typeof GraphRoute
+  '/reports': typeof ReportsRoute
+  '/scholarships': typeof ScholarshipsRoute
   '/settings': typeof SettingsRoute
+  '/students': typeof StudentsRoute
+  '/tree': typeof TreeRoute
+  '/what-if': typeof WhatIfRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/algorithms' | '/settings'
+  fullPaths:
+    | '/'
+    | '/algorithms'
+    | '/allocate'
+    | '/compare'
+    | '/graph'
+    | '/reports'
+    | '/scholarships'
+    | '/settings'
+    | '/students'
+    | '/tree'
+    | '/what-if'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/algorithms' | '/settings'
-  id: '__root__' | '/' | '/algorithms' | '/settings'
+  to:
+    | '/'
+    | '/algorithms'
+    | '/allocate'
+    | '/compare'
+    | '/graph'
+    | '/reports'
+    | '/scholarships'
+    | '/settings'
+    | '/students'
+    | '/tree'
+    | '/what-if'
+  id:
+    | '__root__'
+    | '/'
+    | '/algorithms'
+    | '/allocate'
+    | '/compare'
+    | '/graph'
+    | '/reports'
+    | '/scholarships'
+    | '/settings'
+    | '/students'
+    | '/tree'
+    | '/what-if'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AlgorithmsRoute: typeof AlgorithmsRoute
+  AllocateRoute: typeof AllocateRoute
+  CompareRoute: typeof CompareRoute
+  GraphRoute: typeof GraphRoute
+  ReportsRoute: typeof ReportsRoute
+  ScholarshipsRoute: typeof ScholarshipsRoute
   SettingsRoute: typeof SettingsRoute
+  StudentsRoute: typeof StudentsRoute
+  TreeRoute: typeof TreeRoute
+  WhatIfRoute: typeof WhatIfRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -75,11 +189,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AlgorithmsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/allocate': {
+      id: '/allocate'
+      path: '/allocate'
+      fullPath: '/allocate'
+      preLoaderRoute: typeof AllocateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare': {
+      id: '/compare'
+      path: '/compare'
+      fullPath: '/compare'
+      preLoaderRoute: typeof CompareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/graph': {
+      id: '/graph'
+      path: '/graph'
+      fullPath: '/graph'
+      preLoaderRoute: typeof GraphRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/scholarships': {
+      id: '/scholarships'
+      path: '/scholarships'
+      fullPath: '/scholarships'
+      preLoaderRoute: typeof ScholarshipsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/students': {
+      id: '/students'
+      path: '/students'
+      fullPath: '/students'
+      preLoaderRoute: typeof StudentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tree': {
+      id: '/tree'
+      path: '/tree'
+      fullPath: '/tree'
+      preLoaderRoute: typeof TreeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/what-if': {
+      id: '/what-if'
+      path: '/what-if'
+      fullPath: '/what-if'
+      preLoaderRoute: typeof WhatIfRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -88,7 +258,15 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AlgorithmsRoute: AlgorithmsRoute,
+  AllocateRoute: AllocateRoute,
+  CompareRoute: CompareRoute,
+  GraphRoute: GraphRoute,
+  ReportsRoute: ReportsRoute,
+  ScholarshipsRoute: ScholarshipsRoute,
   SettingsRoute: SettingsRoute,
+  StudentsRoute: StudentsRoute,
+  TreeRoute: TreeRoute,
+  WhatIfRoute: WhatIfRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

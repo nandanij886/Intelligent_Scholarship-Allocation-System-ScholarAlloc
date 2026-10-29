@@ -77,7 +77,7 @@ function makeCtx(students: Student[], scholarships: Scholarship[], req: Allocati
   });
   const scores = new Map(students.map((s) => [s.id, priorityScore(s, req.weights)]));
   const options = new Map(
-    students.map((st) => [st.id, schs.filter((sch) => isEligible(st, sch)).sort((a, b) => b.amount - a.amount)]),
+    students.map((st) => [st.id, schs.filter((sch) => isEligible(st, sch)).sort((a, b) => a.amount - b.amount)]),
   );
   return { students, scholarships: schs, budget: req.budget, weights: req.weights, scores, options };
 }
@@ -213,14 +213,30 @@ function runDP(ctx: Ctx): AllocationResult {
   const allocs: Allocation[] = [];
   const order = [...chosen.keys()].sort((a, b) => ctx.scores.get(b)! - ctx.scores.get(a)!);
   let repaired = 0;
-  const place = (id: string, prefer?: Scholarship) => {
-    const opts = prefer ? [prefer, ...ctx.options.get(id)!.filter((o) => o.id !== prefer.id).sort((a, b) => a.amount - b.amount)] : ctx.options.get(id)!;
+  const place = (id: string, prefer?: Scholarship): Scholarship | null => {
+    const opts = prefer ? [prefer, ...ctx.options.get(id)!.filter((o) => o.id !== prefer.id)] : ctx.options.get(id)!;
     for (const o of opts)
       if (!res.why(o)) {
         res.take(o);
         allocs.push({ studentId: id, scholarshipId: o.id, amount: o.amount, score: ctx.scores.get(id)! });
         return o;
       }
+    // One-level augmenting path: move a seat holder to another free scholarship
+    for (const o of opts) {
+      if (res.seats.get(o.id)! > 0) continue;
+      for (const a of allocs.filter((x) => x.scholarshipId === o.id)) {
+        const alt = ctx.options.get(a.studentId)!.find((x) => x.id !== o.id && !res.why(x) && res.budget - x.amount + o.amount >= o.amount);
+        if (!alt) continue;
+        res.take(o, -1);
+        res.take(alt);
+        a.scholarshipId = alt.id;
+        a.amount = alt.amount;
+        if (res.why(o)) { res.take(alt, -1); res.take(o); a.scholarshipId = o.id; a.amount = o.amount; continue; }
+        res.take(o);
+        allocs.push({ studentId: id, scholarshipId: o.id, amount: o.amount, score: ctx.scores.get(id)! });
+        return o;
+      }
+    }
     return null;
   };
   for (const id of order) {
@@ -259,9 +275,11 @@ function runSearch(ctx: Ctx, bnb: boolean): AllocationResult {
     return id;
   };
   // Upper bound: current value + best `seatsLeft` remaining scores (sorted desc => prefix of suffix)
+  const minAmt = Math.min(...ctx.scholarships.map((s) => s.amount));
   const bound = (i: number, val: number) => {
     let b = val;
-    for (let k = i; k < n && k - i < seatsLeft; k++) b += scoreArr[k];
+    const room = Math.min(seatsLeft, Math.floor(res.budget / minAmt));
+    for (let k = i; k < n && k - i < room; k++) b += scoreArr[k];
     return b;
   };
   const dfs = (i: number, val: number, nodeId: number) => {
@@ -300,6 +318,12 @@ function runSearch(ctx: Ctx, bnb: boolean): AllocationResult {
     const skip = rec(nodeId, `skip ${st.id}`, "explored", i + 1, val);
     dfs(i + 1, val, skip);
   };
+  if (bnb) {
+    // Incumbent from greedy gives Branch & Bound a strong initial lower bound.
+    const g = runPQ(ctx);
+    best = g.allocations;
+    bestVal = g.totalPriority;
+  }
   const root = rec(null, "start", "explored", 0, 0);
   dfs(0, 0, root);
   return finish(ctx, bnb ? "BNB" : "BACKTRACK", best, {

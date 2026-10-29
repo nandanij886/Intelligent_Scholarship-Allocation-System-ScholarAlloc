@@ -11,6 +11,11 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner";
+import { AppSidebar } from "@/components/app-sidebar";
+import { updateSettings, useSettings } from "@/lib/settings";
+import { Moon, Sun } from "lucide-react";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -78,11 +83,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "ScholarAlloc — Intelligent Scholarship Allocation" },
+      { name: "description", content: "DSA-driven scholarship allocation for SDG-4 Quality Education." },
+      { property: "og:title", content: "ScholarAlloc — Intelligent Scholarship Allocation" },
+      { property: "og:description", content: "DSA-driven scholarship allocation for SDG-4 Quality Education." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
@@ -93,6 +97,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Sora:wght@500;600;700&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -103,7 +113,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
@@ -117,11 +127,43 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const settings = useSettings();
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", settings.theme === "dark");
+  }, [settings.theme]);
+  useEffect(() => {
+    queryClient.invalidateQueries();
+  }, [settings.mockMode, settings.baseUrl, queryClient]);
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <SidebarProvider>
+        <div className="flex min-h-screen w-full bg-background">
+          <AppSidebar />
+          <div className="flex min-w-0 flex-1 flex-col">
+            <header className="sticky top-0 z-20 flex h-14 items-center gap-2 border-b bg-background/85 px-3 backdrop-blur">
+              <SidebarTrigger />
+              <span className="font-display text-sm font-semibold text-foreground md:hidden">ScholarAlloc</span>
+              <div className="ml-auto flex items-center gap-2">
+                <span className="hidden rounded-full border px-2.5 py-0.5 font-mono text-[11px] text-muted-foreground sm:inline">
+                  {settings.mockMode ? "MOCK" : settings.baseUrl}
+                </span>
+                <button
+                  aria-label="Toggle theme"
+                  className="rounded-md p-2 text-muted-foreground hover:bg-muted hover:text-foreground"
+                  onClick={() => updateSettings({ theme: settings.theme === "dark" ? "light" : "dark" })}
+                >
+                  {settings.theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                </button>
+              </div>
+            </header>
+            <main className="mx-auto w-full max-w-7xl flex-1 p-4 sm:p-6">
+              <Outlet />
+            </main>
+          </div>
+        </div>
+      </SidebarProvider>
+      <Toaster richColors position="top-right" />
     </QueryClientProvider>
   );
 }

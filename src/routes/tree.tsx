@@ -134,7 +134,7 @@ function TreePage() {
   );
 }
 
-function NodePill({ node, st, current, small }: { node: TreeNode; st?: TreeCheckStep; current?: boolean; small?: boolean }) {
+function NodePill({ node, st, current, small }: { node: TreeNode; st?: TreeCheckStep | undefined; current?: boolean; small?: boolean }) {
   return (
     <div
       title={st?.reason}

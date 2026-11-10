@@ -114,7 +114,7 @@ function ScholarshipsPage() {
               className="grid grid-cols-2 gap-3"
               onSubmit={(e) => {
                 e.preventDefault();
-                if (!editing.id || !editing.name) return toast.error("ID and name are required");
+                if (!editing.id || !editing.name) { toast.error("ID and name are required"); return; }
                 save.mutate(editing);
               }}
             >

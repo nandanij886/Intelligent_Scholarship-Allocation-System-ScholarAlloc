@@ -220,8 +220,8 @@ function StudentsPage() {
               className="grid grid-cols-2 gap-3"
               onSubmit={(e) => {
                 e.preventDefault();
-                if (!editing.id || !editing.name) return toast.error("ID and name are required");
-                if (isNew && map.get(editing.id)) return toast.error("That ID already exists");
+                if (!editing.id || !editing.name) { toast.error("ID and name are required"); return; }
+                if (isNew && map.get(editing.id)) { toast.error("That ID already exists"); return; }
                 save.mutate(editing);
               }}
             >

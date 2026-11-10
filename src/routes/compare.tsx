@@ -76,7 +76,7 @@ function ComparePage() {
               <Card key={k} className="p-4">
                 <h3 className="mb-2 text-sm font-semibold text-foreground">{label}</h3>
                 <ResponsiveContainer width="100%" height={200}>
-                  <BarChart data={chart}>
+                  <BarChart data={chart ?? []}>
                     <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                     <XAxis dataKey="name" fontSize={11} stroke="var(--muted-foreground)" />
                     <YAxis fontSize={11} stroke="var(--muted-foreground)" />

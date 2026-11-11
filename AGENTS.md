@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Recover from stale route-chunk failures (a dynamic import that rejects after a rebuild) by reloading once through `src/lib/chunk-reload.ts`; keep its cooldown guard so a genuinely missing chunk can never cause a reload loop.

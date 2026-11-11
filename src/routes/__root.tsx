@@ -17,6 +17,13 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { updateSettings, useSettings } from "@/lib/settings";
 import { Moon, Sun } from "lucide-react";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { shouldReloadForChunkError } from "@/lib/chunk-reload";
+
+// A stale chunk name (the app was rebuilt under an open page) only needs a fresh
+// document; reload once instead of leaving the error screen up.
+function reloadForChunkError(error: unknown) {
+  if (shouldReloadForChunkError(error)) window.location.reload();
+}
 
 function NotFoundComponent() {
   return (
@@ -45,6 +52,7 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   const router = useRouter();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
+    reloadForChunkError(error);
   }, [error]);
 
   return (
@@ -134,6 +142,18 @@ function RootComponent() {
   useEffect(() => {
     queryClient.invalidateQueries();
   }, [settings.mockMode, settings.baseUrl, queryClient]);
+  useEffect(() => {
+    const recover = (event: Event) => {
+      const reason = (event as PromiseRejectionEvent).reason ?? (event as ErrorEvent).error ?? event;
+      reloadForChunkError(reason);
+    };
+    window.addEventListener("unhandledrejection", recover);
+    window.addEventListener("error", recover);
+    return () => {
+      window.removeEventListener("unhandledrejection", recover);
+      window.removeEventListener("error", recover);
+    };
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

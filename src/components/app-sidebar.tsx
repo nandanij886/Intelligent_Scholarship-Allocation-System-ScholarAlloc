@@ -36,8 +36,13 @@ const groups = [
   {
     label: "Reference",
     items: [
-      { title: "Algorithms", url: "/algorithms", icon: BookOpen },
       { title: "Settings", url: "/settings", icon: Settings },
+    ],
+  },
+  {
+    label: "Help",
+    items: [
+      { title: "How it works", url: "/algorithms", icon: BookOpen },
     ],
   },
 ] as const;

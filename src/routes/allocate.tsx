@@ -54,12 +54,13 @@ function AllocatePage() {
         </Card>
         <Card className="p-4"><WeightsEditor value={weights} onChange={setWeights} /></Card>
         <Card className="p-4">
-          <Label>Algorithm</Label>
+          <Label>Allocation method</Label>
           <RadioGroup className="mt-2" value={algo} onValueChange={(v) => setAlgo(v as Algorithm)}>
             {ALGORITHMS.map((a) => (
               <label key={a.id} className="flex items-center gap-2 text-sm"><RadioGroupItem value={a.id} /> {a.label}</label>
             ))}
           </RadioGroup>
+          <p className="mt-2 text-xs text-muted-foreground">Priority Queue is the default. Other methods are used to compare results.</p>
           <Button className="mt-4 w-full" onClick={() => run.mutate()} disabled={run.isPending}><Play className="h-4 w-4" /> {run.isPending ? "Running…" : "Run allocation"}</Button>
         </Card>
       </div>

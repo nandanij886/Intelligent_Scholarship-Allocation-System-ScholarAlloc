@@ -6,9 +6,9 @@ import { PageHeader } from "@/components/common";
 export const Route = createFileRoute("/algorithms")({
   head: () => ({
     meta: [
-      { title: "Algorithms & Complexity — ScholarAlloc" },
+      { title: "How it works — ScholarAlloc" },
       { name: "description", content: "Every data structure and algorithm in ScholarAlloc with complexity and design rationale." },
-      { property: "og:title", content: "Algorithms & Complexity — ScholarAlloc" },
+      { property: "og:title", content: "How it works — ScholarAlloc" },
       { property: "og:description", content: "Data structures, algorithms, complexity and why each was chosen." },
     ],
   }),
@@ -33,7 +33,7 @@ const ITEMS = [
 function AlgorithmsPage() {
   return (
     <div>
-      <PageHeader unit="Reference" title="Algorithms & complexity" subtitle="Every structure used in ScholarAlloc, where it lives in the app, and why it was chosen." />
+      <PageHeader unit="Help" title="How it works" subtitle="Every structure used in ScholarAlloc, where it lives in the app, and why it was chosen." />
       <div className="grid gap-4 md:grid-cols-2">
         {ITEMS.map((it) => (
           <Card key={it.name} className="p-5 shadow-card">

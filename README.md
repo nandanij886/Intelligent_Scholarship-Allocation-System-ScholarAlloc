@@ -42,25 +42,24 @@ The scholarship rules set the priority score. The heap only keeps the order; it 
 ```
 React interface  →  Spring Boot REST APIs  →  Java DSA logic  →  MySQL (or H2)
 ```
-The web interface can also run in an in-browser **mock mode** that applies the same rules, so the demo works without the server.
+The live demo runs in an in-browser **mock mode** that applies the same rules, so it works without the server.
 
 ## Repository structure
 ```
-frontend/   React web interface (generated with Lovable)
-backend/    Spring Boot project (Java): Allocator class with the allocation methods
+src/, public/, package.json   React web interface (generated with Lovable, TanStack Start)
+backend/                      Spring Boot project (Java) with the Allocator class (to be added)
 README.md
 ```
-Adjust the folder names above if your layout is different.
 
 ## Run locally
-**Frontend**
+**Frontend** (requires Node.js or Bun)
 ```bash
-cd frontend
-npm install
-npm run dev
+bun install
+bun run dev
 ```
+`npm install` and `npm run dev` can be used instead. The interface starts in its in-browser mock mode, so no server is needed to try it.
 
-**Backend** (requires JDK 17 or later and Maven)
+**Backend** (to be added in `backend/`; requires JDK 17 or later and Maven)
 ```bash
 cd backend
 mvn spring-boot:run
